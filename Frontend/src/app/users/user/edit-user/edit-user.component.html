@@ -1,0 +1,14 @@
+<div class="grid grid-cols-3 gap-4 p-12">
+    <div class="col-span-1"></div>
+    <div class="col-span-1">
+      <user-form 
+        [isSubmitting]="isSubmitting"
+        [errorMessage]="errorMessage"
+        [successMessage]="successMessage"
+        (submit)="onSubmit($event)">
+        <span ngProjectAs="title">Edit User Details</span>
+        <span ngProjectAs="confirmButtonText">{{ isSubmitting ? 'Updating...' : 'Update User' }}</span>
+      </user-form>
+    </div>
+    <div class="col-span-1 row-span-1"></div>
+  </div>
