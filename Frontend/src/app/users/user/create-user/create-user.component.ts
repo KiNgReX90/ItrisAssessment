@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../../services/user.service';
-import { User } from '../../../models/users/user.types';
+import { User } from '../../../models/user.types';
 import { Router } from '@angular/router';
 import { UserFormComponent } from '../../user-form/user-form.component';
 
@@ -40,7 +40,7 @@ export class CreateUserComponent {
         }, 1500);
       },
       error: (error) => {
-        this.errorMessage = 'Failed to create user. Please try again.';
+        this.errorMessage = error.error.message || 'Failed to create user. Please try again.';
         this.isSubmitting = false;
         console.error('Error creating user:', error);
       }

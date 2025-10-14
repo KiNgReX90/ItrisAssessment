@@ -1,4 +1,4 @@
-<div class="p-6 bg-slate-700 border border-green-400 rounded-md">
+<div class="p-6 bg-slate-700 border border-green-400 rounded-md caret-transparent">
   <div class="text-white text-2xl text-center pb-6 select-none"><ng-content select="title"/></div>
 
   <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="space-y-4">
@@ -7,7 +7,7 @@
         <input 
           type="text" 
           formControlName="name"
-          class="w-full rounded-md p-2 bg-zinc-900 text-white border"
+          class="w-full rounded-md p-2 bg-zinc-900 text-white border caret-white"
           [class.border-red-500]="userForm.get('name')?.invalid && userForm.get('name')?.touched"
           [class.border-gray-600]="userForm.get('name')?.valid || !userForm.get('name')?.touched"
         />
@@ -19,6 +19,9 @@
             @if (userForm.get('name')?.errors?.['minlength']) {
               <span>Name must be at least 2 characters</span>
             }
+            @if (userForm.get('name')?.errors?.['maxlength']) {
+              <span>Name must be less than 255 characters</span>
+            }
           </div>
         }
       </div>
@@ -27,7 +30,7 @@
         <input 
           type="email" 
           formControlName="email"
-          class="w-full rounded-md p-2 bg-zinc-900 text-white border"
+          class="w-full rounded-md p-2 bg-zinc-900 text-white border caret-white"
           [class.border-red-500]="userForm.get('email')?.invalid && userForm.get('email')?.touched"
           [class.border-gray-600]="userForm.get('email')?.valid || !userForm.get('email')?.touched"
         />
@@ -39,24 +42,27 @@
             @if (userForm.get('email')?.errors?.['email']) {
               <span>Please enter a valid email address</span>
             }
+            @if (userForm.get('email')?.errors?.['maxlength']) {
+              <span>Email must be less than 255 characters</span>
+            }
           </div>
         }
       </div>
       <div class="flex justify-between gap-4 pt-8">
-        <button confirmButton (click)="onSubmit()" [disabled]="userForm.invalid || isSubmitting">
-           {{ isSubmitting ? 'Creating...' : 'Create User' }}
+        <button confirmButton (click)="onSubmit()" [disabled]="userForm.invalid || isSubmitting || !hasChanges">
+           <ng-content select="confirmButtonText"></ng-content>
         </button>
         <button cancelButton (click)="onCancel()">
           Cancel
         </button>
       </div>
       @if (errorMessage) {
-      <div class="text-red-500 text-sm mt-2">
-        {{ errorMessage }}
-      </div>
+        <div class="text-red-500 mt-2 text-center">
+          {{ errorMessage }}
+        </div>
       }
       @if (successMessage) {
-        <div class="text-green-500 text-sm mt-2">
+        <div class="text-green-500 mt-2 text-center">
           {{ successMessage }}
         </div>
       }

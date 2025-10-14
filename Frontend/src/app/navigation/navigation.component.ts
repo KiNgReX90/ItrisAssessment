@@ -31,10 +31,6 @@ import { NavButton } from '../html-elements/buttons/nav.button';
   `
 })
 export class NavigationComponent {
-  constructor(public router: Router) {
-    router.events.subscribe(event => {
-      console.log(event);
-    });
-  }
-  navRoutes = routes.filter(route => route.path && route.path !== 'users/:id/edit');
+  constructor(public router: Router) {}
+  navRoutes = routes.filter(route => route.path && route.path !== 'users/:id/edit' && route.path !== '**');
 }

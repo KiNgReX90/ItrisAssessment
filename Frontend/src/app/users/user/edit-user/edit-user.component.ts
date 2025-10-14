@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../../services/user.service';
-import { User } from '../../../models/users/user.types';
-import { Router } from '@angular/router';
+import { User } from '../../../models/user.types';
+import { Router, ActivatedRoute } from '@angular/router';
 import { UserFormComponent } from '../../user-form/user-form.component';
 
 @Component({
@@ -11,30 +11,46 @@ import { UserFormComponent } from '../../user-form/user-form.component';
   imports: [CommonModule, UserFormComponent],
   templateUrl: './edit-user.component.html'
 })
-export class EditUserComponent implements OnInit {
-  @Input() userId?: number;
+export class EditUserComponent implements OnInit, AfterViewInit {
   @ViewChild(UserFormComponent) userFormComponent?: UserFormComponent;
   
+  userId?: number;
+  userData?: User;
   isSubmitting = false;
   errorMessage = '';
   successMessage = '';
 
   constructor(
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    if (this.userId) {
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (idParam) {
+      this.userId = parseInt(idParam, 10);
       this.loadUser();
     }
   }
 
+  ngAfterViewInit(): void {
+    if (this.userData && this.userFormComponent) {
+      this.userFormComponent.userForm.patchValue({
+        name: this.userData.name,
+        email: this.userData.email,
+      });
+    }
+  }
+
+  
   loadUser(): void {
     if (!this.userId) return;
     
+    // Always use the db as the source of truth, so we can be sure we're getting the latest data.
     this.userService.getUserById(this.userId).subscribe({
       next: (user) => {
+        this.userData = user;
         if (this.userFormComponent) {
           this.userFormComponent.userForm.patchValue({
             name: user.name,

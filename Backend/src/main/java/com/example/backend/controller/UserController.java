@@ -5,8 +5,7 @@ import com.example.backend.dto.user.UserDto;
 import com.example.backend.dto.user.UserRequestDto;
 import com.example.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,14 +17,22 @@ public class UserController {
 
     private final UserService userService;
 
+    @GetMapping("/total")
+    public ResponseEntity<Long> getTotalUsers() {
+        return ResponseEntity.ok(userService.getTotalUsers());
+    }
+
     @GetMapping
-    public Page<UserDto> getAllUsers(Pageable pageable) {
-        return userService.getAllUsers(pageable);
+    public ResponseEntity<Slice<UserDto>> getUsersSlice(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "25") int size
+    ) {
+        return ResponseEntity.ok(userService.getUsersSlice(page, size));
     }
 
     @GetMapping("/{id}")
-    public UserDto getUserById(@PathVariable Long id) {
-        return userService.getById(id);
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getById(id));
     }
 
     @PostMapping
@@ -37,8 +44,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public UserDto updateUser(@PathVariable Long id, @RequestBody UserRequestDto request) {
-        return userService.update(id, request);
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserRequestDto request) {
+        return ResponseEntity.ok(userService.update(id, request));
     }
 
     @DeleteMapping("/{id}")

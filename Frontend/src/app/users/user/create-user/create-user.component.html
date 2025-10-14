@@ -1,6 +1,5 @@
-<div class="grid grid-cols-3 gap-4 p-24">
-  <div class="col-span-1"></div>
-  <div class="col-span-1">
+<div class="grid grid-cols-[25%_1fr_25%] gap-4 pt-12">
+  <div class="col-span-1 col-start-2">
     <user-form 
       [isSubmitting]="isSubmitting"
       [errorMessage]="errorMessage"
@@ -10,5 +9,4 @@
       <span ngProjectAs="confirmButtonText">{{ isSubmitting ? 'Creating...' : 'Create User' }}</span>
     </user-form>
   </div>
-  <div class="col-span-1 row-span-1"></div>
 </div>
