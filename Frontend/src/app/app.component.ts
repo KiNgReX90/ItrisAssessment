@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { NavigationComponent } from './navigation/navigation.component';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -12,7 +12,11 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor(library: FaIconLibrary) {
+  constructor(library: FaIconLibrary, public router: Router) {
     library.addIconPacks(fas);
+  }
+
+  get currentTitle(): string {
+    return this.router.url.split('/').pop() || '';
   }
 }

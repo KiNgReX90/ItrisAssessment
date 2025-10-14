@@ -1,1 +1,36 @@
-<p>users-overview works!</p>
+<div class="grid pt-24 px-32">
+  <div class="w-full bg-slate-700 border border-green-400 rounded-md p-6">
+    @if (users.length > 0) {
+        <p class="text-white text-2xl text-center pb-12 select-none">Users Overview</p>
+        <table class="w-full">
+          <thead>
+            <tr class="border-b grid grid-cols-[1fr_1fr_auto] border-green-400 px-4 py-2 text-lg select-none">
+              <th class="text-white text-left px-4 font-semibold">Name</th>
+              <th class="text-white text-left px-4 font-semibold">Email</th>
+              <th class="text-white text-center px-4 font-semibold">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (user of users; track user.id) {
+                <tr class="border-b grid grid-cols-[1fr_1fr_auto] border-green-400 px-4 py-2 text-lg select-none">
+                  <td class="px-4 text-left">{{ user.name }}</td>
+                  <td class="px-4 text-left">{{ user.email }}</td>
+                  <td class="px-4 text-center">
+                    <i class="fas fa-pencil" (click)="onEditUser(user.id!)"></i> <i class="fas fa-trash" (click)="onDeleteUser(user.id!)"></i>
+                  </td>
+                </tr>
+            }
+          </tbody>
+        </table>
+    }
+    @else {
+        <div class="select-none">
+            <p class="text-white text-2xl text-center pb-12">Whoops!</p>
+            <p class="text-white text-center text-lg">Uh oh... It seems like there are no users registered yet...<br>But no worries, you can add your first user now by clicking the button below!</p>
+            <div class="flex justify-center pt-12">
+              <button class="border border-green-400 text-white hover:bg-green-400 hover:text-black transition-all duration-300 px-4 py-2 rounded-md" (click)="router.navigate(['/users/create'])">Add User</button>
+            </div>
+        </div>
+    }
+  </div>
+</div>

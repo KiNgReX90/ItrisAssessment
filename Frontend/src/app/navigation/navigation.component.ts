@@ -10,10 +10,10 @@ import { NavButton } from '../html-elements/buttons/nav.button';
   standalone: true,
   imports: [CommonModule, RouterLink, NavButton, FontAwesomeModule],
   template: `
-    <nav class="bg-black bg-opacity-80 py-4 px-2">
-      <div class="flex justify-between">
+    <nav class="bg-black bg-opacity-80 py-12 px-12 min-h-full">
+      <div class="flex-row justify-between items-center">
         @for (route of navRoutes; track route.path) {
-          <div class="col-span-1">
+          <div class="py-5">
             <button navButton [routerLink]="'/' + route.path" [active]="router.url === '/' + route.path">{{ route.title || route.path }}
               @if (route.data && route.data['icon']) {
                 <fa-icon [icon]="route.data['icon']" ngProjectAs="icon"></fa-icon>

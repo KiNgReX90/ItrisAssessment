@@ -7,8 +7,8 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <div class="select-none"
-    [ngClass]="active ? 'p-2 border border-green-400 rounded-md flex items-center gap-2 bg-green-400 text-black': 
-    'p-2 border border-green-400 text-green-400 rounded-md flex items-center gap-2 hover:bg-green-400 hover:text-black transition-all duration-500'">
+    [ngClass]="active ? 'text-xl border-b border-green-400 flex items-center gap-2 pb-2 font-semibold text-green-400': 
+    'text-xl border-b border-transparent text-gray-500 flex items-center pb-2 gap-2 hover:text-green-400 hover:border-green-400 hover:border-b-green-400 hover:font-semibold transition-all duration-300'">
       <ng-content select="icon" />
       <ng-content />
     </div>
