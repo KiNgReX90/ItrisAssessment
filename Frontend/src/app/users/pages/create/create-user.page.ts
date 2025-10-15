@@ -3,20 +3,20 @@ import { CommonModule } from '@angular/common';
 import { UserService } from '../../../services/user.service';
 import { User } from '../../../models/user.types';
 import { Router } from '@angular/router';
-import { UserFormComponent } from '../../user-form/user-form.component';
+import { UserFormComponent } from '../../components/user-form.component';
 
 @Component({
-  selector: 'app-create-user',
+  selector: 'create-user-page',
   standalone: true,
   imports: [CommonModule, UserFormComponent],
-  templateUrl: './create-user.component.html',
+  templateUrl: './create-user.page.html',
   styles: `
     :host {
       display: block;
     }
   `
 })
-export class CreateUserComponent {
+export class CreateUserPage {
   isSubmitting = false;
   errorMessage = '';
   successMessage = '';

@@ -2,10 +2,9 @@ package com.example.backend.dto.user;
 
 import com.example.backend.model.users.User;
 
+// For what we send to the client
+// Usage of a DTO to avoid exposing the internal representation of the user entity to the client.
 public record UserDto(Long id, String name, String email) {
-    public static UserDto fromUser(User user) {
-        return new UserDto(user.getId(), user.getName(), user.getEmail());
-    }
     public UserDto(User user) {
         this(user.getId(), user.getName(), user.getEmail());
     }

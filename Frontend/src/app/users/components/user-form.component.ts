@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user.types';
-import { CancelButton } from 'src/app/html-elements/buttons/cancel.button'; 
-import { ConfirmButton } from 'src/app/html-elements/buttons/confirm.button'; 
+import { CancelButton } from 'src/app/html-elements/cancel.button'; 
+import { ConfirmButton } from 'src/app/html-elements/confirm.button'; 
 
 @Component({
   selector: 'user-form',
@@ -21,7 +21,7 @@ export class UserFormComponent {
   @Input() errorMessage = '';
   @Input() successMessage = '';
 
-  @Output() submit = new EventEmitter<Partial<User>>();
+  @Output() formSubmit = new EventEmitter<Partial<User>>();
 
   constructor(private fb: FormBuilder, private router: Router) {
     this.userForm = this.fb.group({
@@ -45,7 +45,7 @@ export class UserFormComponent {
         name: this.userForm.value.name,
         email: this.userForm.value.email,
       };  
-      this.submit.emit(userData);
+      this.formSubmit.emit(userData);
     }
   }
 

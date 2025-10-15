@@ -1,21 +1,21 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../../services/user.service';
 import { User } from '../../../models/user.types';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UserFormComponent } from '../../user-form/user-form.component';
+import { UserFormComponent } from '../../components/user-form.component';
 
 @Component({
-  selector: 'app-edit-user',
+  selector: 'edit-user-page',
   standalone: true,
   imports: [CommonModule, UserFormComponent],
-  templateUrl: './edit-user.component.html'
+  templateUrl: './edit-user.page.html'
 })
-export class EditUserComponent implements OnInit, AfterViewInit {
-  @ViewChild(UserFormComponent) userFormComponent?: UserFormComponent;
-  
-  userId?: number;
-  userData?: User;
+export class EditUserPage implements OnInit {
+  private userFormComponent = viewChild.required(UserFormComponent);
+
+  userId!: number;
+  userData!: User;
   isSubmitting = false;
   errorMessage = '';
   successMessage = '';
@@ -33,16 +33,6 @@ export class EditUserComponent implements OnInit, AfterViewInit {
       this.loadUser();
     }
   }
-
-  ngAfterViewInit(): void {
-    if (this.userData && this.userFormComponent) {
-      this.userFormComponent.userForm.patchValue({
-        name: this.userData.name,
-        email: this.userData.email,
-      });
-    }
-  }
-
   
   loadUser(): void {
     if (!this.userId) return;
@@ -51,12 +41,10 @@ export class EditUserComponent implements OnInit, AfterViewInit {
     this.userService.getUserById(this.userId).subscribe({
       next: (user) => {
         this.userData = user;
-        if (this.userFormComponent) {
-          this.userFormComponent.userForm.patchValue({
-            name: user.name,
-            email: user.email,
-          });
-        }
+        this.userFormComponent().userForm.patchValue({
+          name: user.name,
+          email: user.email,
+        });
       },
       error: (error) => {
         this.errorMessage = error.error.message;
@@ -74,7 +62,7 @@ export class EditUserComponent implements OnInit, AfterViewInit {
 
     this.userService.updateUser(this.userId, userData as User).subscribe({
       next: () => {
-        this.successMessage = 'User updated successfully!';
+        this.successMessage = 'The user has been updated successfully!';
         this.isSubmitting = false;
         setTimeout(() => {
           this.router.navigate(['/users']);
@@ -84,6 +72,9 @@ export class EditUserComponent implements OnInit, AfterViewInit {
         this.errorMessage = error.error.message;
         this.isSubmitting = false;
         console.error('Error updating user:', error);
+      },
+      complete: () => {
+        this.userFormComponent().userForm.reset();
       }
     });
   }

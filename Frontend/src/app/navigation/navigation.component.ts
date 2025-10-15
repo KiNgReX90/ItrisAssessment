@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { routes } from '../app.routes';
-import { NavButton } from '../html-elements/buttons/nav.button';
+import { NavButton } from '../html-elements/nav.button';
 
 @Component({
   selector: 'app-navigation',

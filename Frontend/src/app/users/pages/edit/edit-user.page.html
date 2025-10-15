@@ -5,7 +5,7 @@
         [originalUser]="userData"
         [errorMessage]="errorMessage"
         [successMessage]="successMessage"
-        (submit)="onSubmit($event)">
+        (formSubmit)="onSubmit($event)">
         <span ngProjectAs="title">Edit User Details</span>
         <span ngProjectAs="confirmButtonText">{{ isSubmitting ? 'Updating...' : 'Update User' }}</span>
       </user-form>

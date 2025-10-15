@@ -12,15 +12,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200") // For development purposes, in production this should be changed accordingly.
 public class UserController {
 
     private final UserService userService;
-
-    @GetMapping("/total")
-    public ResponseEntity<Long> getTotalUsers() {
-        return ResponseEntity.ok(userService.getTotalUsers());
-    }
 
     @GetMapping
     public ResponseEntity<Slice<UserDto>> getUsersSlice(

@@ -4,7 +4,7 @@
       [isSubmitting]="isSubmitting"
       [errorMessage]="errorMessage"
       [successMessage]="successMessage"
-      (submit)="onSubmit($event)">
+      (formSubmit)="onSubmit($event)">
       <span ngProjectAs="title">New User Details</span>
       <span ngProjectAs="confirmButtonText">{{ isSubmitting ? 'Creating...' : 'Create User' }}</span>
     </user-form>

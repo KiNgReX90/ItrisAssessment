@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-// @Transactional annotation is perhaps not necessary at this point, in the future it will ensure consistency 
+// @Transactional annotation is perhaps not necessary at this point, in the future it will ensure consistency,
 // when perhaps other services are also interacting with the user entity.
 @Service
 @RequiredArgsConstructor
@@ -25,20 +25,25 @@ public class UserService {
 
     private final UserRepository repo;
 
-    // Sorting by id in descending order to show the latest users first (more convenient for demo purposes)
+    // No caching here, since it creates a lot of cache entries and cache is being evicted each time a user is created, updated or deleted.
     public Slice<UserDto> getUsersSlice(int page, int size) {
+        // Controlling the pagination parameters to avoid potential performance issues.
+        if (page < 0 || size <= 0 || size > 100) {
+            throw new IllegalArgumentException("Invalid pagination parameters: %d, %d".formatted(page, size));
+        }
+
+        // Using Pageable for a more database friendly approach.
         var pageable = PageRequest.of(page, size, Sort.by("id").descending());
-        return repo.findBy(pageable).map(UserDto::fromUser);
+        return repo.findBy(pageable).map(UserDto::new);
     }
 
     @Cacheable(value = "users", key = "#id")
     public UserDto getById(Long id) {
-        return repo.findById(id).map(UserDto::fromUser)
+        return repo.findById(id).map(UserDto::new)
                 .orElseThrow(() -> new NotFoundException("User %d not found".formatted(id)));
     }
 
     @Transactional
-    @CacheEvict(value = "users", allEntries = true)
     public CreatedResource<UserDto> create(UserRequestDto req) {
         validateUniqueEmail(req.email(), null);
         
@@ -52,7 +57,7 @@ public class UserService {
                 .buildAndExpand(saved.getId())
                 .toUri();
 
-        return new CreatedResource<UserDto>(UserDto.fromUser(saved), location);
+        return new CreatedResource<UserDto>(new UserDto(saved), location);
     }
 
     @Transactional
@@ -65,15 +70,15 @@ public class UserService {
 
         user.setName(req.name());
         user.setEmail(req.email());
-        return UserDto.fromUser(repo.save(user));
+        return new UserDto(repo.save(user));
     }
 
     @Transactional
+    @CacheEvict(value = "users", key = "#id")
     public void delete(Long id) {
         if (repo.existsById(id)) {
             repo.deleteById(id);
         }
-
         else {
             throw new NotFoundException("User %d not found".formatted(id));
         }
