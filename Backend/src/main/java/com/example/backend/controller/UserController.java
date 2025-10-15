@@ -4,6 +4,7 @@ import com.example.backend.dto.CreatedResource;
 import com.example.backend.dto.user.UserDto;
 import com.example.backend.dto.user.UserRequestDto;
 import com.example.backend.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody UserRequestDto request) {
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserRequestDto request) {
         CreatedResource<UserDto> created = userService.create(request);
         return ResponseEntity
                 .created(created.location())
@@ -39,7 +40,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserRequestDto request) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDto request) {
         return ResponseEntity.ok(userService.update(id, request));
     }
 

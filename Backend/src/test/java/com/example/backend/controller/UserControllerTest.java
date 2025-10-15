@@ -95,14 +95,12 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.content[0].email").exists()).andExpect(jsonPath("$.content[0].email").value(testUsers.get(testUsers.size() - 1).getEmail()));
     }
 
-
     @Test
     void getUsersSliceFailTest() throws Exception {
         mockMvc.perform(get("/users").param("page", "999999").param("size", "999999"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Invalid pagination parameters: 999999, 999999"));
     }
-    
 
     @Test
     void getUserByIdTest() throws Exception {
@@ -136,7 +134,7 @@ class UserControllerTest {
     }
 
     @Test
-    void createUserFailTest() throws Exception {
+    void createUserFailEmailInUseTest() throws Exception {
         UserRequestDto request = new UserRequestDto("Duplicate User", "victor@example.com");
 
         mockMvc.perform(post("/users")
@@ -144,6 +142,16 @@ class UserControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("This email is already in use. Please use a different email."));
+    }
+
+    @Test
+    void createUserFailInvalidEmailTest() throws Exception {
+        UserRequestDto request = new UserRequestDto("Invalid Email", "invalidemail");
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Invalid email format"));
     }
 
     @Test

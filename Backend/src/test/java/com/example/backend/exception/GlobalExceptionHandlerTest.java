@@ -67,7 +67,6 @@ class GlobalExceptionHandlerTest {
         assertThat(timestamp).isBefore(LocalDateTime.now().plusSeconds(2));
     }
 
-
     @Test
     void handleInternalServerErrorTest() {
         Exception exception = new Exception("Internal server error");
