@@ -6,6 +6,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   standalone: true,
   imports: [FontAwesomeModule],
   templateUrl: './dashboard.page.html',
+  styleUrl: './dashboard.page.scss'
 })
 export class DashboardPage {
 
